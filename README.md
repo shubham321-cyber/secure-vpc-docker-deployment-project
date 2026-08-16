@@ -36,6 +36,7 @@ flowchart TD
 ```
                                
 Key Features
+
 Custom VPC Networking: Designed an isolated VPC network with public subnets, an Internet Gateway (IGW), and dedicated route tables instead of relying on the default AWS VPC.
 
 Granular Network Security: Configured AWS Security Groups with least-privilege principles (restricted SSH on Port 22 and HTTP on Port 80).
@@ -46,14 +47,15 @@ Automated CI/CD: Zero-touch deployment using GitHub Actions. Pushing changes to 
 
 Self-Healing Deployment Script: Integrated automated dependency verification (auto-installs Docker and Git if missing) and instant health checks (curl -I http://localhost:80).                     
 Domain	Technologies Used
-Cloud Provider	AWS (VPC, EC2, Internet Gateway, Route Tables, Security Groups)
-Containerization	Docker, Nginx (Alpine-based)
-CI/CD & Automation	GitHub Actions, YAML, Bash Scripting
-Operating System	Ubuntu 24.04 LTS / WSL 2
-Frontend	HTML5, CSS3, JavaScript
+Cloud Provider: AWS (VPC, EC2, Internet Gateway, Route Tables, Security Groups)
+Containerization: Docker, Nginx (Alpine-based)
+CI/CD & Automation:	GitHub Actions, YAML, Bash Scripting
+Operating System:	Ubuntu 24.04 LTS / WSL 2
+Frontend:	HTML5, CSS3, JavaScript
 
 
 secure-vpc-docker-deployment-project/
+
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml        # GitHub Actions CI/CD pipeline
