@@ -6,21 +6,37 @@ An end-to-end cloud infrastructure and DevOps automation project. This project d
 
 ## 📌 Architecture Overview
 
-[ Developer (WSL/Local) ] 
-         │  (git push)
-         ▼
-[ GitHub Repository (main branch) ]
-         │  (Triggers Workflow)
-         ▼
-[ GitHub Actions Runner ]
-         │  (Secure SSH via appleboy/ssh-action)
-         ▼
-[ AWS Custom VPC (10.0.0.0/16) ]
-   └── [ Public Subnet ]
-          └── [ Security Group (Inbound: 22, 80) ]
-                 └── [ EC2 Instance (Ubuntu) ]
-                        └── [ Docker Engine ]
-                               └── [ Nginx Container (Port 80:80) ]
+## 📌 Architecture Overview
+
+```mermaid
+flowchart TD
+    subgraph Local ["👨‍💻 Developer Workstation"]
+        Dev["Local Terminal (WSL 2)"] -->|git push origin main| GH["GitHub Repository"]
+    end
+
+    subgraph CI_CD ["⚡ GitHub Actions Pipeline"]
+        GH -->|Trigger Workflow| Runner["Ubuntu Runner"]
+        Runner -->|Secure SSH (Key Auth)| EC2
+    end
+
+    subgraph AWS ["☁️ AWS Custom VPC (10.0.0.0/16)"]
+        subgraph Subnet ["🌐 Public Subnet (10.0.1.0/24)"]
+            SG["🔒 Security Group<br/>(Inbound: 22 SSH, 80 HTTP)"]
+            
+            subgraph EC2_Inst ["🖥️ EC2 Instance (Ubuntu 24.04)"]
+                Docker["🐳 Docker Engine"]
+                Container["📦 Nginx Web Container<br/>Port 80:80"]
+                Docker --> Container
+            end
+            
+            SG --> EC2_Inst
+        end
+        IGW["🌍 Internet Gateway"] <--> Subnet
+    end
+
+    User["🌐 Public Users / Traffic"] -->|HTTP:80| IGW
+    Runner -.->|Port 22 (SSH Deploy)| SG
+```
 
                                
 Key Features
