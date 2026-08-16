@@ -21,6 +21,8 @@ An end-to-end cloud infrastructure and DevOps automation project. This project d
                  └── [ EC2 Instance (Ubuntu) ]
                         └── [ Docker Engine ]
                                └── [ Nginx Container (Port 80:80) ]
+
+                               
 Key Features
 Custom VPC Networking: Designed an isolated VPC network with public subnets, an Internet Gateway (IGW), and dedicated route tables instead of relying on the default AWS VPC.
 
@@ -37,6 +39,8 @@ Containerization	Docker, Nginx (Alpine-based)
 CI/CD & Automation	GitHub Actions, YAML, Bash Scripting
 Operating System	Ubuntu 24.04 LTS / WSL 2
 Frontend	HTML5, CSS3, JavaScript
+
+
 secure-vpc-docker-deployment-project/
 ├── .github/
 │   └── workflows/
@@ -46,6 +50,8 @@ secure-vpc-docker-deployment-project/
 ├── style.css                 # UI styling
 ├── script.js                 # Frontend dynamics
 └── README.md                 # Project documentation
+
+
 The deployment pipeline is defined in .github/workflows/deploy.yml and executes the following steps on every push:
 
 Trigger: Listens for code pushes to the main branch.
