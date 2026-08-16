@@ -1,0 +1,42 @@
+name: Deploy Direct to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Build & Run on EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # 1. Repo pull ya clone karo
+            if [ -d "secure-vpc-docker-deployment-project" ]; then
+              cd secure-vpc-docker-deployment-project
+              git pull origin main
+            else
+              git clone https://github.com/${{ github.repository }}.git secure-vpc-docker-deployment-project
+              cd secure-vpc-docker-deployment-project
+            fi
+
+            # 2. Docker image build karo
+            sudo docker build -t secure-app:latest .
+
+            # 3. Purana container stop & remove karo agar chal raha ho
+            sudo docker stop secure-app-container || true
+            sudo docker rm secure-app-container || true
+
+            # 4. Naya container port 80 pe run karo
+            sudo docker run -d -p 80:80 --name secure-app-container --restart unless-stopped secure-app:latest
+
+            # 5. Deployment verify karo
+            sleep 2
+            curl -I http://localhost:80
