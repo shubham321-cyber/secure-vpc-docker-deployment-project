@@ -6,9 +6,6 @@ An end-to-end cloud infrastructure and DevOps automation project. This project d
 
 ## 📌 Architecture Overview
 
-## 📌 Architecture Overview
-
-```mermaid
 flowchart TD
     subgraph Local ["👨‍💻 Developer Workstation"]
         Dev["Local Terminal (WSL 2)"] -->|git push origin main| GH["GitHub Repository"]
@@ -16,7 +13,6 @@ flowchart TD
 
     subgraph CI_CD ["⚡ GitHub Actions Pipeline"]
         GH -->|Trigger Workflow| Runner["Ubuntu Runner"]
-        Runner -->|Secure SSH (Key Auth)| EC2
     end
 
     subgraph AWS ["☁️ AWS Custom VPC (10.0.0.0/16)"]
@@ -34,9 +30,8 @@ flowchart TD
         IGW["🌍 Internet Gateway"] <--> Subnet
     end
 
+    Runner -->|"Secure SSH (Key Auth)"| EC2_Inst
     User["🌐 Public Users / Traffic"] -->|HTTP:80| IGW
-    Runner -.->|Port 22 (SSH Deploy)| SG
-```
 
                                
 Key Features
