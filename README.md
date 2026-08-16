@@ -4,35 +4,36 @@ An end-to-end cloud infrastructure and DevOps automation project. This project d
 
 ---
 
-## 📌 Architecture Overview
+## 📌 Architecture Overview 
 
+```mermaid
 flowchart TD
-    subgraph Local ["👨‍💻 Developer Workstation"]
+    subgraph Local ["Developer Workstation"]
         Dev["Local Terminal (WSL 2)"] -->|git push origin main| GH["GitHub Repository"]
     end
 
-    subgraph CI_CD ["⚡ GitHub Actions Pipeline"]
+    subgraph CI_CD ["GitHub Actions Pipeline"]
         GH -->|Trigger Workflow| Runner["Ubuntu Runner"]
     end
 
-    subgraph AWS ["☁️ AWS Custom VPC (10.0.0.0/16)"]
-        subgraph Subnet ["🌐 Public Subnet (10.0.1.0/24)"]
-            SG["🔒 Security Group<br/>(Inbound: 22 SSH, 80 HTTP)"]
+    subgraph AWS ["AWS Custom VPC (10.0.0.0/16)"]
+        subgraph Subnet ["Public Subnet (10.0.1.0/24)"]
+            SG["Security Group (Port 22, Port 80)"]
             
-            subgraph EC2_Inst ["🖥️ EC2 Instance (Ubuntu 24.04)"]
-                Docker["🐳 Docker Engine"]
-                Container["📦 Nginx Web Container<br/>Port 80:80"]
+            subgraph EC2_Inst ["EC2 Instance (Ubuntu 24.04)"]
+                Docker["Docker Engine"]
+                Container["Nginx Web Container (Port 80:80)"]
                 Docker --> Container
             end
             
             SG --> EC2_Inst
         end
-        IGW["🌍 Internet Gateway"] <--> Subnet
+        IGW["Internet Gateway"] <--> Subnet
     end
 
-    Runner -->|"Secure SSH (Key Auth)"| EC2_Inst
-    User["🌐 Public Users / Traffic"] -->|HTTP:80| IGW
-
+    Runner -->|Deploy via SSH Key| EC2_Inst
+    User["Public Web Users"] -->|HTTP Traffic : 80| IGW
+```
                                
 Key Features
 Custom VPC Networking: Designed an isolated VPC network with public subnets, an Internet Gateway (IGW), and dedicated route tables instead of relying on the default AWS VPC.
